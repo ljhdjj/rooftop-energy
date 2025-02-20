@@ -67,9 +67,9 @@ const submitForm = async (event) => {
         alert("Please enter your name and phone/email.");
         return;
     }
-
+    
     try{
-        const response = await fetch('http://localhost:3000/submit',{
+        const response = await fetch('http://rooftop-energyljh.netlify.app/submit',{
             method:'POST',
             body:formData 
         });
