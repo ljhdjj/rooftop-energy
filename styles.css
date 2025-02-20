@@ -1,6 +1,17 @@
 /* Apply brand colors */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+.font-poppins{
+    font-family: "Poppins", serif;
+}
+
+.font-inter{
+    font-family: "Inter", serif;
+}
+
+*{
+    box-sizing: border-box;
+}
 body {
-    font-family: "Corbel Light", sans-serif;
     font-size: 16px;
     line-height: 1.5;
     font-weight: 300;
@@ -14,7 +25,7 @@ body {
 /* Headers - Modern sans-serif */
 h1, h2, h3, h4 {
     font-family: Arial, sans-serif;
-    color: #fcd913;
+    /* color: #fcd913; */
     font-weight: bold;
     margin: 10px 0;
 }
@@ -35,16 +46,16 @@ h4 { font-size: 20px; }
 }
 
 /* Input and Button Styling */
-input, select, button {
+/* input, select, button {
     margin: 10px;
     padding: 10px;
     border: 1px solid #fcd913;
     border-radius: 5px;
     font-size: 16px;
-}
+} */
 
 /* Button Styling */
-button {
+/* button {
     background-color: #fcd913;
     color: #000000;
     font-weight: bold;
@@ -54,7 +65,7 @@ button {
 button:hover {
     background-color: #000000;
     color: #ffffff;
-}
+} */
 
 /* Light Gray Background for Sections */
 #calculator, #contact {
@@ -66,16 +77,31 @@ button:hover {
     max-width: 500px;
 }
 
-/* Responsive Form */
-form input {
-    display: block;
-    width: 100%;
-    margin-bottom: 10px;
-}
 
 /* Center Content */
 .container {
     max-width: 1200px;
     margin: auto;
     padding: 20px;
+}
+
+
+.form-container{
+    backdrop-filter: blur(10px);
+    background:rgba(255, 255, 255, 0.3);
+    border-radius:20px;
+    border-left:1px solid rgba(255, 255, 255, 0.3);
+    border-top:1px solid rgba(255, 255, 255, 0.3);
+    box-shadow:20px 20px 40px -6px rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.form-container{
+    
+}
+option:disabled{
+    color:#ddd;
+}
+option{
+    color:#000;
 }

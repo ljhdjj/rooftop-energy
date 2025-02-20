@@ -1,17 +1,18 @@
 // script.js
-document.getElementById('calculate-btn').addEventListener('click', calculateSavings);
-document.getElementById('print-btn').addEventListener('click', printQuote); 
-document.getElementById('callback').addEventListener('test1', submitForm); 
 
+const API_URL = 'http://localhost:3000';
 
-function calculateSavings() {
-    let billAmount = parseFloat(document.getElementById("bill").value);
+function calculateSavings(event) {
+    event.preventDefault();
+    console.log('adad');
+    const formData = new FormData(event.target);
+    const billAmount = formData.get('bill');
 
     if (!billAmount || billAmount <= 0) {
         alert("Please enter a valid bill amount.");
         return;
     }
-
+   
     const tnbTariff = 0.509;
     const solarCostPerKw = 3000;
     const peakSunHours = 3;
@@ -52,54 +53,38 @@ function calculateSavings() {
     
 }
 
-function printQuote() {
+const printQuote = () => {
     window.print();
 }
 
-function submitForm(event) {
+const submitForm = async (event) => {
     event.preventDefault();
+    console.log('submit');
+ 
+    const form = event.target;
+    const formData = new FormData(form);
+   
+   
 
-    const name = document.getElementById('name').value;
-    const phone = document.getElementById('phone').value;
-
-
-    if (!name || !phone) {
+    if (!formData.get("name") || !formData.get("phone")) {
         alert("Please enter your name and phone/email.");
         return;
     }
+    
+    try{
+        const response = await fetch('http://rooftop-energyljh.netlify.app/submit',{
+            method:'POST',
+            body:formData 
+        });
+        const result = await response.json();
+        console.log(result);
+    }catch(error){
+        console.error(error);
+    }
 
-    fetch('/test1', { 
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `name=${name}&phone=${phone}`,
-    })
-    .then(response => {
-        if (!response.ok) { 
-            throw new Error(`HTTP error ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            alert("Thank you for your request! We will contact you soon.");
-            document.getElementById('callback-form').reset();
-        } else {
-            alert("Error submitting form. Please try again.");
-            console.error("Server error:", data.message); 
-        }
-    })
-    .catch(error => {
-        console.error("Fetch/JSON error:", error); 
-        if (error.message === "Failed to fetch") {
-            alert("Network error. Please check your internet connection and try again.");
-        } else if (error.message.startsWith("HTTP error")) {
-            alert(error.message); 
-        } else if (error instanceof SyntaxError) {
-            alert("Error parsing server response. Please try again later.");
-        } else {
-            alert("An error occurred. Please try again later.");
-        }
-    });
+    
 }
+// document.getElementById('calculate-btn').addEventListener('click', calculateSavings);
+// document.getElementById('print-btn').addEventListener('click', printQuote); 
+// document.getElementById('callback').addEventListener('submit', submitForm); 
+document.getElementById('calculateForm').addEventListener('submit',calculateSavings);
