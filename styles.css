@@ -1,15 +1,11 @@
 /* Apply brand colors */
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
 @theme {
   --color-secondary: #fcd913;
-}
-.font-poppins {
-  font-family: "Poppins", serif;
-}
-
-.font-inter {
-  font-family: "Inter", serif;
+  --font-poppins:"Poppins", serif;
+  --font-inter: "Inter", serif;
 }
 
 * {
@@ -137,3 +133,34 @@ option {
     0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
   box-shadow: 0 0 #0000, 0 0 #0000, 0 0 #0000, 0 0 #0000, var(--tw-shadow);
 }
+
+/* styles.css or global.css */
+.error {
+  @apply ring-2 ring-rose-500/50;
+}
+
+.show {
+  @apply !flex;
+}
+
+.successMsg{
+  @apply text-green-700 bg-green-100 border-green-400 max-w-full py-2 px-4 font-inter shadow-lg rounded-md flex gap-2 items-center font-normal border z-[9999];
+}
+
+.errorMsg{
+  @apply text-red-700 bg-red-100 border-red-400 max-w-full py-2 px-4 font-inter shadow-lg rounded-md flex gap-2 items-center font-normal border z-[9999];
+}
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  --_c:no-repeat radial-gradient(farthest-side,#fcd913 92%,#0000);
+  background: 
+    var(--_c) top,
+    var(--_c) left,
+    var(--_c) right,
+    var(--_c) bottom;
+  background-size: 12px 12px;
+  animation: l7 1s infinite;
+}
+@keyframes l7 {to{transform: rotate(.5turn)}}
+

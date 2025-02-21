@@ -26,28 +26,19 @@ function calculateSavings(event) {
   let totalSystemCost = systemSize * solarCostPerKw;
 
   let targetMonthlyPayment = billAmount * (1 - targetSavings);
-  console.log({
-    monthlyEnergy,
-    dailyEnergy,
-    systemSize,
-    totalSystemCost,
-  });
+
   // Loan term calculation (iterative approach)
   let n = 0;
   let monthlyInterestRate = interestRate / 12;
   let loanAmount = totalSystemCost;
 
-  if (targetMonthlyPayment > 0) {
+  if(targetMonthlyPayment > 0) { // Avoid division by zero
     while (true) {
-      n++;
-      let calculatedPayment =
-        (loanAmount *
-          monthlyInterestRate *
-          Math.pow(1 + monthlyInterestRate, n)) /
-        (Math.pow(1 + monthlyInterestRate, n) - 1);
-      if (calculatedPayment <= targetMonthlyPayment) {
-        break;
-      }
+        n++;
+        let calculatedPayment = (loanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, n)) / (Math.pow(1 + monthlyInterestRate, n) - 1);
+        if (calculatedPayment <= targetMonthlyPayment) {
+            break;
+        }
     }
   }
 
@@ -55,10 +46,9 @@ function calculateSavings(event) {
     systemSize: `${systemSize.toFixed(2)} kWp`,
     systemCost: `RM${totalSystemCost.toFixed(2)}`,
     monthlyPayment: `RM${targetMonthlyPayment.toFixed(2)}`,
-    loanTerm: `RM${targetMonthlyPayment.toFixed(2)}`,
+    loanTerm: `${n} ${n>1?'months':'month'}`,
   };
   for (const [id, value] of Object.entries(result)) {
-    // Create a new paragraph element
     const element = document.getElementById(`${id}`);
     if (element) {
       element.innerHTML = value;
@@ -77,53 +67,122 @@ const closePopOutWindow = () => {
 const printQuote = () => {
   window.print();
 };
-
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const submitForm = async (event) => {
   event.preventDefault();
-  console.log("submit");
 
   const form = event.target;
   const formData = new FormData(form);
-
+  
   if (!formData.get("name") || !formData.get("phone")) {
     alert("Please enter your name and phone/email.");
     return;
   }
-
+  const phoneOrEmail = formData.get("phone")
+  const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(phoneOrEmail);
+  const isPhone = /^\+?[0-9]{7,15}(-[0-9]{1,15})*$/.test(phoneOrEmail);
+  if(!isEmail && !isPhone){
+    document.getElementById('phone').classList.add('error')
+    document.querySelector('.errorLabel').classList.remove('!hidden');
+    return;
+  }
+ 
+  document.getElementById('loading').classList.add('show');
   try {
     const response = await fetch(
-      "http://rooftop-energyljh.netlify.app/submit",
+      `${API_URL}/submit`,
       {
         method: "POST",
         body: formData,
       }
     );
+
     const result = await response.json();
-    console.log(result);
+    if(result?.success){
+      message(true);
+    }else{
+      message(false);
+    }
   } catch (error) {
+    message(false);
     console.error(error);
+  }finally{
+    document.getElementById('loading').classList.remove('show');
+    document.getElementById('name').value='';
+    document.getElementById('phone').value='';
   }
+
 };
 
 const pageChange = (event) => {
   const value = event.target.value;
-  console.log(value);
-  if (value === "solar-saving-calculator") {
-    console.log("adad");
-    return;
+  let hideContainer = "solarSavingCalculatorContainer";
+  if (value === "solarSavingCalculatorContainer") {
+    hideContainer = "callbackRequestContainer";
+    document.getElementById(`${value}`).classList.remove('!hidden');
   }
 
-  if (value === "callback-request") {
-    return;
+  if (value === "callbackRequestContainer") {
+    document.getElementById(`${value}`).classList.remove('!hidden');
   }
+  document.getElementById(`${hideContainer}`).classList.add('!hidden');
+
 };
-// document.getElementById('calculate-btn').addEventListener('click', calculateSavings);
-// document.getElementById('print-btn').addEventListener('click', printQuote);
-// document.getElementById('callback').addEventListener('submit', submitForm);
+
+const phoneOrEmailOnInput = (event) => {
+  const target = event.target;
+  if (target.classList.contains('error')) {
+    const value = target.value.trim();
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    const isPhone = /^\+?[0-9]{7,15}(-[0-9]{1,15})*$/.test(value);
+    if(isPhone || isEmail){
+      target.classList.remove('error');
+      document.querySelector('.errorLabel').classList.add('!hidden');
+    }
+  } 
+}
+
+const message = (success)=>{
+  
+  const msgDiv = document.createElement('div');
+  let classname = "errorMsg"
+  if(success){
+    classname = "successMsg";
+  }
+
+  msgDiv.className = classname;
+  // Create the icon
+  const icon = document.createElement('ion-icon');
+  if(success){
+    icon.setAttribute('name', 'checkmark-circle');
+  }else{
+    icon.setAttribute('name', 'close-circle');
+  }
+
+  // Create the text span
+  const textSpan = document.createElement('span');
+  textSpan.className = "text-sm";
+  textSpan.textContent = "You have successfully submitted the callback request!";
+
+  // Append elements
+  msgDiv.appendChild(icon);
+  msgDiv.appendChild(textSpan);
+  
+  // Append to body
+  document.getElementById('msgArea').prepend(msgDiv);
+
+  // Remove the message after 2 seconds
+  setTimeout(() => {
+    msgDiv.remove();
+  }, 10000);
+}
+document.getElementById('callbackRequestContainer').addEventListener('submit', submitForm);
 document
-  .getElementById("calculateForm")
+  .getElementById("solarSavingCalculatorContainer")
   .addEventListener("submit", calculateSavings);
 document.getElementById("close").addEventListener("click", closePopOutWindow);
 document.querySelectorAll(".selection").forEach((radio) => {
   radio.addEventListener("change", pageChange);
 });
+
+document.getElementById('phone').addEventListener('input',phoneOrEmailOnInput);
