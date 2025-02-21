@@ -26,14 +26,18 @@ function calculateSavings(event) {
   let totalSystemCost = systemSize * solarCostPerKw;
 
   let targetMonthlyPayment = billAmount * (1 - targetSavings);
-
+  console.log({
+    monthlyEnergy,
+    dailyEnergy,
+    systemSize,
+    totalSystemCost,
+  });
   // Loan term calculation (iterative approach)
   let n = 0;
   let monthlyInterestRate = interestRate / 12;
   let loanAmount = totalSystemCost;
 
   if (targetMonthlyPayment > 0) {
-    // Avoid division by zero
     while (true) {
       n++;
       let calculatedPayment =
@@ -62,12 +66,14 @@ function calculateSavings(event) {
   }
   document.getElementById("overlay").classList.remove("!opacity-0", "!z-0");
 }
+
 const closePopOutWindow = () => {
   document.getElementById("overlay").classList.add("!opacity-0");
   setTimeout(() => {
     document.getElementById("overlay").classList.add("!z-0");
   }, 200);
 };
+
 const printQuote = () => {
   window.print();
 };
@@ -78,25 +84,6 @@ const submitForm = async (event) => {
 
   const form = event.target;
   const formData = new FormData(form);
-
-  if (!formData.get("name") || !formData.get("phone")) {
-    alert("Please enter your name and phone/email.");
-    return;
-  }
-
-  try {
-    const response = await fetch(
-      "http://rooftop-energyljh.netlify.app/submit",
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
-    const result = await response.json();
-    console.log(result);
-  } catch (error) {
-    console.error(error);
-  }
 
   if (!formData.get("name") || !formData.get("phone")) {
     alert("Please enter your name and phone/email.");
