@@ -6,8 +6,9 @@
     <title>Rooftop Energy - Solar Savings Calculator</title>
     <link rel="stylesheet" href="styles.css" />
     <link href="./public/app.css" rel="stylesheet" />
-
     <link href="https://fonts.cdnfonts.com/css/corbel" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   </head>
   <body class="w-full flex flex-col">
     <div class="fixed left-0 top-0 -z-10 h-full w-full">
@@ -54,37 +55,27 @@
             <label class="text-xs font-bold text-gray-600"
               >Recommended System Size</label
             >
-            <div
-              class="bg-slate-50 border w-full border-slate-300 px-2 py-1 rounded-md text-left font-inter"
-              id="systemSize"
-            ></div>
+            <input type="text" class="bg-slate-50 border w-full border-slate-300 px-2 py-1 rounded-md text-left font-inter outline-0"
+            id="systemSize">
           </div>
           <div class="flex flex-col w-full items-start">
             <label class="text-xs font-bold text-gray-600"
               >Estimated System Cost</label
             >
-            <div
-              class="bg-slate-50 border w-full border-slate-300 px-2 py-1 rounded-md text-left font-inter"
-              id="systemCost"
-            ></div>
+            <input type="text" class="bg-slate-50 border w-full border-slate-300 px-2 py-1 rounded-md text-left font-inter outline-0"
+            id="systemCost">
           </div>
           <div class="flex flex-col w-full items-start">
             <label class="text-xs font-bold text-gray-600"
               >Target Monthly Payment</label
             >
-            <div
-              class="bg-slate-50 border w-full border-slate-300 px-2 py-1 rounded-md text-left font-inter"
-              id="monthlyPayment"
-            ></div>
+            <input type="text" id="monthlyPayment"  class="bg-slate-50 border w-full border-slate-300 px-2 py-1 rounded-md text-left font-inter outline-0">
           </div>
           <div class="flex flex-col w-full items-start">
             <label class="text-xs font-bold text-gray-600"
               >Estimated Loan Term</label
             >
-            <div
-              class="bg-slate-50 border w-full border-slate-300 px-2 py-1 rounded-md text-left font-inter"
-              id="loanTerm"
-            ></div>
+            <input type="text" id="loanTerm"  class="bg-slate-50 border w-full border-slate-300 px-2 py-1 rounded-md text-left font-inter outline-0">
           </div>
         </div>
         <div
@@ -93,14 +84,13 @@
           <button class="bg-gray-100 border-gray-300 text-gray-700" id="close">
             close
           </button>
-          <button class="bg-secondary text-yellow-800 border-yellow-500">
+          <button class="bg-secondary text-yellow-800 border-yellow-500" id="print">
             print quota
           </button>
         </div>
       </div>
     </div>
     <header class="flex items-center justify-between py-8 px-20">
-      <!-- <div class="bg-gray-100/20 flex items-center justify-center rounded-2xl shadow-xl shadow-white/30 p-2"> -->
       <svg
         width="24"
         height="24"
@@ -262,10 +252,10 @@
           
       </div>
     </div>
-
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
     <script src="script.js"></script>
+    
   </body>
 </html>

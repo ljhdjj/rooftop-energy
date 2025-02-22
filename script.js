@@ -17,8 +17,8 @@ function calculateSavings(event) {
   const solarCostPerKw = 3000;
   const peakSunHours = 3;
   const efficiency = 0.8;
-  const interestRate = 0.05; // 5% annual interest
-  const targetSavings = 0.3; // 30% savings
+  const interestRate = 0.05;
+  const targetSavings = 0.3;
 
   let monthlyEnergy = billAmount / tnbTariff;
   let dailyEnergy = monthlyEnergy / 30;
@@ -50,8 +50,9 @@ function calculateSavings(event) {
   };
   for (const [id, value] of Object.entries(result)) {
     const element = document.getElementById(`${id}`);
+   
     if (element) {
-      element.innerHTML = value;
+      element.value = value;
     }
   }
   document.getElementById("overlay").classList.remove("!opacity-0", "!z-0");
@@ -64,9 +65,7 @@ const closePopOutWindow = () => {
   }, 200);
 };
 
-const printQuote = () => {
-  window.print();
-};
+
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const submitForm = async (event) => {
   event.preventDefault();
@@ -151,31 +150,54 @@ const message = (success)=>{
   }
 
   msgDiv.className = classname;
-  // Create the icon
   const icon = document.createElement('ion-icon');
   if(success){
     icon.setAttribute('name', 'checkmark-circle');
   }else{
     icon.setAttribute('name', 'close-circle');
   }
-
-  // Create the text span
   const textSpan = document.createElement('span');
   textSpan.className = "text-sm";
   textSpan.textContent = "You have successfully submitted the callback request!";
-
-  // Append elements
   msgDiv.appendChild(icon);
   msgDiv.appendChild(textSpan);
-  
-  // Append to body
   document.getElementById('msgArea').prepend(msgDiv);
 
-  // Remove the message after 2 seconds
   setTimeout(() => {
     msgDiv.remove();
-  }, 10000);
+  }, 3000);
 }
+
+const print = () => {
+  if (window.jspdf) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.setFont("helvetica", "bold");
+    const title = "Estimated Solar Cost & Saving"
+    doc.text(title, 20, 20); 
+    const textWidth = doc.getTextWidth(title); 
+    doc.line(20, 22, 20 + textWidth, 22);
+    const pdfBlob = doc.output("blob");
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    const result = {
+      systemSize: "Recommended System Size",
+      systemCost: "Estimated System Cost",
+      monthlyPayment: "Target Monthly Payment",
+      loanTerm: "Estimated Loan Term",
+    };
+    
+    for (const [id, label] of Object.entries(result)) {
+      const element = document.getElementById(`${id}`);
+      
+      console.log(element.value);
+    }
+    window.open(pdfUrl);
+  } else {
+    console.error("jsPDF is not loaded properly.");
+  }
+}
+
+
 document.getElementById('callbackRequestContainer').addEventListener('submit', submitForm);
 document
   .getElementById("solarSavingCalculatorContainer")
@@ -186,3 +208,6 @@ document.querySelectorAll(".selection").forEach((radio) => {
 });
 
 document.getElementById('phone').addEventListener('input',phoneOrEmailOnInput);
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("print").addEventListener("click",print);
+});
