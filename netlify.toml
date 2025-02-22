@@ -1,0 +1,13 @@
+[build]
+  functions = "functions"  # Directory for serverless functions
+  publish = "public"       # Directory for static files (if any)
+  command = "npm install"
+  
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/server"
+  status = 200
+
+[dev]
+  command = "netlify functions:serve" # Command for local development
+  port = 3000 # Port for Netlify Dev Server
