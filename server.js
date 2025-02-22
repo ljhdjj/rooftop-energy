@@ -67,7 +67,7 @@ app.post('/submit', upload.none(), async (req, res) => {
     
 });
 
-app.use(express.static(path.join(__dirname, '..', 'public'))); 
+app.use(express.static(path.join(__dirname, '.'))); 
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);

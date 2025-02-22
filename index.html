@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rooftop Energy - Solar Savings Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.cdnfonts.com/css/corbel" rel="stylesheet">  </head>
+<body>
+
+    <header>
+        <h1>Rooftop Energy</h1>
+        <p>Save Money with Solar Energy</p>
+    </header>
+
+    <main class="container">
+
+        <section id="calculator">
+            <h2>Solar Savings Calculator</h2>
+
+            <label for="bill">Monthly TNB Bill (RM):</label>
+            <input type="number" id="bill" placeholder="Enter your bill amount" required aria-label="Monthly TNB Bill">
+
+            <label for="location">Location:</label>
+            <select id="location">
+                <option value="">Select State</option>
+                <option value="Selangor">Selangor</option>
+                <option value="Penang">Penang</option>
+                <option value="Kuala Lumpur">Kuala Lumpur</option>
+                <option value="Perak">Perak</option>
+                <option value="Pahang">Pahang</option>
+                <option value="Sarawak">Sarawak</option>
+                <option value="Sabah">Sabah</option>
+                <option value="Kedah">Kedah</option>
+                <option value="Johor">Johor</option>
+                <option value="Perlis">Perlis</option>
+                <option value="Melaka">Melaka</option>
+                <option value="Kelantan">Kelantan</option>
+                <option value="Negeri Sembilan">Negeri Sembilan</option>
+            </select>
+
+            <button id="calculate-btn">Calculate</button>
+            <div id="results"></div>
+            <button id="print-btn">Print Quote</button>
+        </section>
+
+        <section id="contact">
+            <h2>Request a Callback</h2>
+            <form id ="callback" method ="POST" action="http://localhost:3000/submit">
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+                <label for="phone">Your Phone/Email:</label> <--- Combined input
+                <input type="text" id="phone" name="phone" placeholder="Enter your phone or email" required>
+
+                <button type="submit">Submit</button>
+            </form>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
