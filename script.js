@@ -195,7 +195,7 @@ const print = () => {
       const element = document.getElementById(`${id}`);
       doc.setFont("times", "normal");
       doc.setTextColor(0, 0, 0);
-      doc.setFontSize(12);
+      doc.setFontSize(15);
       doc.text(element.value,20,yCoordinate)
       yCoordinate+=8;
     }
