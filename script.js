@@ -2,9 +2,21 @@
 
 const API_URL = "http://localhost:3000";
 
-function calculateSavings(event) {
+const calculateLoanTerm = (P, r, PMT) => {
+  let n = 0;
+  let remainingBalance = P;
+  const monthlyInterestRate = r / 12;
+
+  while (remainingBalance > 0) {
+      n++;
+      remainingBalance = remainingBalance * (1 + monthlyInterestRate) - PMT;
+  }
+
+  return n;
+}
+
+const calculateSavings = (event) => {
   event.preventDefault();
-  console.log("adad");
   const formData = new FormData(event.target);
   const billAmount = formData.get("bill");
 
@@ -27,26 +39,13 @@ function calculateSavings(event) {
 
   let targetMonthlyPayment = billAmount * (1 - targetSavings);
 
-  // Loan term calculation (iterative approach)
-  let n = 0;
-  let monthlyInterestRate = interestRate / 12;
-  let loanAmount = totalSystemCost;
-
-  if(targetMonthlyPayment > 0) { // Avoid division by zero
-    while (true) {
-        n++;
-        let calculatedPayment = (loanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, n)) / (Math.pow(1 + monthlyInterestRate, n) - 1);
-        if (calculatedPayment <= targetMonthlyPayment) {
-            break;
-        }
-    }
-  }
+  const loanTermMonths = calculateLoanTerm(totalSystemCost, interestRate, targetMonthlyPayment);
 
   const result = {
     systemSize: `${systemSize.toFixed(2)} kWp`,
     systemCost: `RM${totalSystemCost.toFixed(2)}`,
     monthlyPayment: `RM${targetMonthlyPayment.toFixed(2)}`,
-    loanTerm: `${n} ${n>1?'months':'month'}`,
+    loanTerm: `${loanTermMonths} ${loanTermMonths>1?'months':'month'}`,
   };
   for (const [id, value] of Object.entries(result)) {
     const element = document.getElementById(`${id}`);
@@ -172,31 +171,42 @@ const print = () => {
   if (window.jspdf) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    doc.setFont("helvetica", "bold");
+    doc.setFont("times", "bold");
     const title = "Estimated Solar Cost & Saving"
     doc.text(title, 20, 20); 
     const textWidth = doc.getTextWidth(title); 
+    const textHeight = doc.getTextDimensions(title).h;
     doc.line(20, 22, 20 + textWidth, 22);
-    const pdfBlob = doc.output("blob");
-    const pdfUrl = URL.createObjectURL(pdfBlob);
+  
     const result = {
       systemSize: "Recommended System Size",
       systemCost: "Estimated System Cost",
       monthlyPayment: "Target Monthly Payment",
       loanTerm: "Estimated Loan Term",
     };
-    
+    let yCoordinate = 20 + textHeight + 5;
+   
     for (const [id, label] of Object.entries(result)) {
+      doc.setFont("times", "bold");
+      doc.setTextColor(128, 128, 128);
+      doc.setFontSize(9);
+      doc.text(label,20,yCoordinate);
+      yCoordinate+=5;
       const element = document.getElementById(`${id}`);
-      
-      console.log(element.value);
+      doc.setFont("times", "normal");
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(12);
+      doc.text(element.value,20,yCoordinate)
+      yCoordinate+=8;
     }
+
+    const pdfBlob = doc.output("blob");
+    const pdfUrl = URL.createObjectURL(pdfBlob);
     window.open(pdfUrl);
   } else {
     console.error("jsPDF is not loaded properly.");
   }
 }
-
 
 document.getElementById('callbackRequestContainer').addEventListener('submit', submitForm);
 document
