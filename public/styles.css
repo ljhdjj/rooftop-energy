@@ -1,0 +1,166 @@
+/* Apply brand colors */
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+@theme {
+  --color-secondary: #fcd913;
+  --font-poppins:"Poppins", serif;
+  --font-inter: "Inter", serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+body {
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 300;
+  background-color: #ffffff;
+  color: #000000;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+/* Headers - Modern sans-serif */
+h1,
+h2,
+h3,
+h4 {
+  font-family: Arial, sans-serif;
+  /* color: #fcd913; */
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+/* Header Sizes (Desktop) */
+h1 {
+  font-size: 32px;
+}
+h2 {
+  font-size: 28px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 20px;
+}
+
+/* Responsive Header Sizes (Mobile) */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+  h1 {
+    font-size: 28px;
+  }
+  h2 {
+    font-size: 24px;
+  }
+  h3 {
+    font-size: 20px;
+  }
+  h4 {
+    font-size: 18px;
+  }
+}
+
+/* Input and Button Styling */
+/* input, select, button {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #fcd913;
+    border-radius: 5px;
+    font-size: 16px;
+} */
+
+/* Button Styling */
+/* button {
+    background-color: #fcd913;
+    color: #000000;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #000000;
+    color: #ffffff;
+} */
+
+/* Light Gray Background for Sections */
+#calculator,
+#contact {
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px auto;
+  width: 80%;
+  max-width: 500px;
+}
+
+/* Center Content */
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+.form-container {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 20px 20px 40px -6px rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.form-container {
+}
+option:disabled {
+  color: #ddd;
+}
+option {
+  color: #000;
+}
+/* bg-secondary text-yellow-800 shadow-yellow-700 */
+.selection:checked + label {
+  background: #fcd913;
+  color: oklch(0.476 0.114 61.907);
+  --tw-shadow-color: oklch(0.554 0.135 66.442);
+  --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)),
+    0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+  box-shadow: 0 0 #0000, 0 0 #0000, 0 0 #0000, 0 0 #0000, var(--tw-shadow);
+}
+
+/* styles.css or global.css */
+.error {
+  @apply ring-2 ring-rose-500/50;
+}
+
+.show {
+  @apply !flex;
+}
+
+.successMsg{
+  @apply text-green-700 bg-green-100 border-green-400 max-w-full py-2 px-4 font-inter shadow-lg rounded-md flex gap-2 items-center font-normal border z-[9999];
+}
+
+.errorMsg{
+  @apply text-red-700 bg-red-100 border-red-400 max-w-full py-2 px-4 font-inter shadow-lg rounded-md flex gap-2 items-center font-normal border z-[9999];
+}
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  --_c:no-repeat radial-gradient(farthest-side,#fcd913 92%,#0000);
+  background: 
+    var(--_c) top,
+    var(--_c) left,
+    var(--_c) right,
+    var(--_c) bottom;
+  background-size: 12px 12px;
+  animation: l7 1s infinite;
+}
+@keyframes l7 {to{transform: rotate(.5turn)}}
+
