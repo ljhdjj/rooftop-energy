@@ -1,12 +1,7 @@
 [build]
-  functions = "functions"  # Directory for serverless functions
-  publish = "public"       # Directory for static files (if any)
-  
-[[redirects]]
-  from = "/api/*"
-  to = "/functions/server"
-  status = 200
+  functions = "functions/" # Or wherever your functions are
+  publish = "public/" #  If you have static assets (e.g., a frontend)
 
 [dev]
-  command = "netlify functions:serve" # Command for local development
-  port = 3000 # Port for Netlify Dev Server
+  framework = "#static" # or your frontend framework if applicable
+  command = "npm run start" # if you have a start script
