@@ -1,29 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rooftop Energy - Solar Savings Calculator</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.cdnfonts.com/css/corbel" rel="stylesheet">  </head>
-<body>
+    <link rel="stylesheet" href="styles.css" />
+    <link href="./public/app.css" rel="stylesheet" />
+    <link href="https://fonts.cdnfonts.com/css/corbel" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-    <header>
-        <h1>Rooftop Energy</h1>
-        <p>Save Money with Solar Energy</p>
+  </head>
+  <body class="w-full flex flex-col">
+    <div class="fixed left-0 top-0 -z-10 h-full w-full">
+      <div class="relative h-full w-full bg-black">
+        <div
+          class="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"
+        ></div>
+        <div
+          class="absolute left-0 right-0 top-[-10%] h-[1000px] w-[1000px] rounded-full bg-[radial-gradient(circle_400px_at_50%_300px,#fbfbfb36,#000)]"
+        ></div>
+      </div>
+    </div>
+    <div class="fixed top-10 left-1/2 -translate-x-1/2 flex flex-col gap-y-2 z-[999]" id="msgArea">
+     
+    </div>
+    <div
+    id="loading"
+    class="bg-black/70 w-full h-full z-100 top-0 left-0 fixed  flex-col justify-center items-center  duration-300 transition-opacity gap-y-4 hidden"
+    >
+    <div class="loader"></div> 
+
+    <div class="text-white animate-pulse">uploading</div>
+  </div>
+
+    <div
+      id="overlay"
+      class="bg-black/70 w-full h-full z-100 !z-0 top-0 left-0 fixed flex flex-col justify-center items-center !opacity-0 duration-300 transition-opacity"
+    >
+      <div
+        class="max-w-[800px] min-w-[400px] flex flex-col items-start rounded-md py-7 px-14 z-[200] bg-white font-inter"
+      >
+        <div class="flex flex-col items-start">
+          <span class="font-bold text-gray-900 text-lg"
+            >Estimated Solar Cost & Saving</span
+          >
+          <span class="text-xs text-gray-400 text-left"
+            >Discover how much you can save by switching to solar energy. This
+            estimate provides your recommended system size, installation cost,
+            and potential savings.</span
+          >
+        </div>
+        <div class="flex flex-col gap-y-3 mt-8 font-inter w-full items-start">
+          <div class="flex flex-col w-full items-start">
+            <label class="text-xs font-bold text-gray-600"
+              >Recommended System Size</label
+            >
+            <input type="text" class="bg-slate-50 border w-full border-slate-300 px-2 py-1 rounded-md text-left font-inter outline-0"
+            id="systemSize">
+          </div>
+          <div class="flex flex-col w-full items-start">
+            <label class="text-xs font-bold text-gray-600"
+              >Estimated System Cost</label
+            >
+            <input type="text" class="bg-slate-50 border w-full border-slate-300 px-2 py-1 rounded-md text-left font-inter outline-0"
+            id="systemCost">
+          </div>
+          <div class="flex flex-col w-full items-start">
+            <label class="text-xs font-bold text-gray-600"
+              >Target Monthly Payment</label
+            >
+            <input type="text" id="monthlyPayment"  class="bg-slate-50 border w-full border-slate-300 px-2 py-1 rounded-md text-left font-inter outline-0">
+          </div>
+          <div class="flex flex-col w-full items-start">
+            <label class="text-xs font-bold text-gray-600"
+              >Estimated Loan Term</label
+            >
+            <input type="text" id="loanTerm"  class="bg-slate-50 border w-full border-slate-300 px-2 py-1 rounded-md text-left font-inter outline-0">
+          </div>
+        </div>
+        <div
+          class="flex gap-x-3 mt-4 items-center justify-end *:capitalize w-full *:text-sm *:font-bold *:w-36 *:rounded-md *:flex *:items-center *:justify-center *:py-2 *:border *:cursor-pointer"
+        >
+          <button class="bg-gray-100 border-gray-300 text-gray-700" id="close">
+            close
+          </button>
+          <button class="bg-secondary text-yellow-800 border-yellow-500" id="print">
+            print quota
+          </button>
+        </div>
+      </div>
+    </div>
+    <header class="flex items-center justify-between py-8 md:px-20 px-6">
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M22.0935 5.05148C22.6174 5.22613 22.9006 5.79245 22.726 6.31639L19.1818 16.9488C18.7735 18.1739 17.627 19.0002 16.3358 19.0002L11.7773 19.0002V20.5001H12.7773C13.3296 20.5001 13.7773 20.9478 13.7773 21.5001C13.7773 22.0524 13.3296 22.5001 12.7773 22.5001H8.77727C8.22498 22.5001 7.77727 22.0524 7.77727 21.5001C7.77727 20.9478 8.22498 20.5001 8.77727 20.5001H9.77727V19.0002L3.77727 19.0002C3.22498 19.0002 2.77727 18.5525 2.77727 18.0002C2.77727 17.4479 3.22498 17.0002 3.77727 17.0002L10.7679 17.0002C10.771 17.0001 10.7741 17.0001 10.7773 17.0001C10.7804 17.0001 10.7835 17.0001 10.7866 17.0002L16.3358 17.0002C16.7662 17.0002 17.1483 16.7247 17.2844 16.3164L20.8286 5.68394C21.0032 5.15999 21.5696 4.87683 22.0935 5.05148Z"
+          fill="#fff"
+        />
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M14.5254 1.49988H11.0911L9.73452 5.99988H13.1688L14.5254 1.49988ZM12.7167 7.49988H9.28231L8.52863 9.99988H11.963L12.7167 7.49988ZM13.5297 9.99988L14.2833 7.49988H18.7894L18.0201 9.99988H13.5297ZM11.5108 11.4999H8.07642L6.71979 15.9999H10.1543L11.5108 11.4999ZM11.7209 15.9999L13.0775 11.4999H17.5586L16.5541 14.7645C16.3281 15.4988 15.6497 15.9999 14.8815 15.9999H11.7209ZM5.15311 15.9999L6.50974 11.4999H1.98891L1.30111 13.7352C0.954854 14.8606 1.79632 15.9999 2.97373 15.9999H5.15311ZM6.96194 9.99988L7.71563 7.49988H3.21968L2.45045 9.99988H6.96194ZM8.16784 5.99988L9.52446 1.49988H6.35834C5.59008 1.49988 4.91166 2.00094 4.68573 2.73523L3.68122 5.99988H8.16784ZM14.7355 5.99988L16.0921 1.49988H18.2661C19.4435 1.49988 20.2849 2.63919 19.9387 3.76453L19.2509 5.99988H14.7355Z"
+          fill="#fff"
+        />
+      </svg>
+      <!-- </div> -->
     </header>
-
-    <main class="container">
-
-        <section id="calculator">
-            <h2>Solar Savings Calculator</h2>
-
-            <label for="bill">Monthly TNB Bill (RM):</label>
-            <input type="number" id="bill" placeholder="Enter your bill amount" required aria-label="Monthly TNB Bill">
-
-            <label for="location">Location:</label>
-            <select id="location">
-                <option value="">Select State</option>
+    <div class="relative mx-auto w-full max-w-7xl px-6 md:px-8 lg:px-12">
+      <div class="pt-4">
+        <div class="relative mx-auto flex max-w-2xl flex-col items-center">
+          <h2
+            class="text-center !text-3xl font-medium text-gray-50 sm:!text-6xl font-inter"
+          >
+            Rooftop Energy
+          </h2>
+          <span
+            class="mt-3 text-center leading-6 text-gray-400 text-sm font-poppins"
+          >
+            Harness the power of the sun and reduce your electricity bills. Our
+            cutting-edge solar energy solutions provide sustainable,
+            cost-effective, and eco-friendly power for your home or business.
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col w-full items-center mt-8 gap-y-20">
+        <div
+          class="bg-white/30 w-fit flex px-3 py-2 rounded-2xl font-inter gap-2"
+        >
+          <div class="flex">
+            <input
+              type="radio"
+              name="selection"
+              value="solarSavingCalculatorContainer"
+              id="solar-saving-calculator"
+              class="selection w-0 h-0 opacity-0"
+              checked
+            />
+            <label
+              for="solar-saving-calculator"
+              class="transition-all duration-100 text-xs sm:text-sm flex rounded-xl font-bold w-[150px] sm:w-48 cursor-pointer items-center justify-center py-2 shadow-sm hover:bg-secondary hover:text-yellow-800 bg-white"
+              >Solar Saving Calculator</label
+            >
+          </div>
+          <div class="flex">
+            <input
+              type="radio"
+              name="selection"
+              value="callbackRequestContainer"
+              id="callback-request"
+              class="selection w-0 h-0 opacity-0"
+            />
+            <label
+              for="callback-request"
+              class="transition-all duration-100 text-xs sm:text-sm bg-gray-200 rounded-xl font-bold w-[150px] sm:w-48 cursor-pointer text-black flex items-center justify-center hover:bg-secondary hover:text-yellow-800"
+              >Callback Request</label
+            >
+          </div>
+        </div>
+        <div class="flex w-full justify-center">
+          <form class="flex flex-col flex-1 gap-y-5 form-container w-full text-left py-10 px-14 text-gray-100 max-w-[600px]" id="solarSavingCalculatorContainer">
+            <div class="flex flex-col gap-2">
+              <label class="font-poppins text-xs">Monthly TNB Bill (RM):</label>
+              <input
+                type="number"
+                id="bill"
+                name="bill"
+                placeholder="Enter your bill amount"
+                min="1"
+                required
+                aria-label="Monthly TNB Bill"
+                class="border-0 border-white bg-gray-50/10 px-2 py-2 rounded-md outline-0 font-inter "
+                required
+              />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label class="font-poppins text-xs">Location:</label>
+              <select
+                id="location"
+                name="location"
+                class="border-white bg-gray-50/10 px-2 py-2 rounded-md outline-0 font-inter"
+                required
+              >
+                <option value="" disabled selected class="text-gray-300">
+                  Please Select State
+                </option>
                 <option value="Selangor">Selangor</option>
                 <option value="Penang">Penang</option>
                 <option value="Kuala Lumpur">Kuala Lumpur</option>
@@ -37,28 +204,58 @@
                 <option value="Melaka">Melaka</option>
                 <option value="Kelantan">Kelantan</option>
                 <option value="Negeri Sembilan">Negeri Sembilan</option>
-            </select>
-
-            <button id="calculate-btn">Calculate</button>
-            <div id="results"></div>
-            <button id="print-btn">Print Quote</button>
-        </section>
-
-        <section id="contact">
-            <h2>Request a Callback</h2>
-            <form id ="callback" method ="POST" action="http://localhost:3000/submit">
-                <label for="name">Your Name:</label>
-                <input type="text" id="name" name="name" placeholder="Enter your name" required>
-
-                <label for="phone">Your Phone/Email:</label> <--- Combined input
-                <input type="text" id="phone" name="phone" placeholder="Enter your phone or email" required>
-
-                <button type="submit">Submit</button>
-            </form>
-        </section>
-
-    </main>
+              </select>
+            </div>
+            <div class="flex justify-end mt-2">
+              <button
+                type="submit"
+                class="bg-secondary text-yellow-700 font-inter font-bold px-6 py-2 text-sm rounded-md shadow-sm shadow-yellow-700 cursor-pointer transition-all duration-300 focus:shadow-none focus:ring-4 ring-yellow-900/50"
+                id="calculate"
+              >
+                Calculate
+              </button>
+            </div>
+          </form>
+          <form class="flex flex-col flex-1 gap-y-5 form-container w-full text-left py-10 px-14 text-gray-100 max-w-[600px] !hidden" id="callbackRequestContainer">
+            <div class="flex flex-col gap-2">
+              <label class="font-poppins text-xs" for="name">Name:</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Enter your name"
+                min="1"
+                required
+                aria-label="name"
+                class="border-0 border-white bg-gray-50/10 px-2 py-2 rounded-md outline-0 font-inter"
+                required
+              />
+            </div>
+            <div class="flex flex-col">
+              <div class="flex flex-col gap-2">
+                <label for="phone" class="font-poppins text-xs">Your Phone/Email:</label>
+                <input type="text" id="phone" name="phone" placeholder="Enter your phone or email" class="border-0 bg-gray-50/10 px-2 py-2 rounded-md outline-0 font-inter " required>
+              </div>
+              <span class="errorLabel text-xs font-poppins text-rose-300 mt-1 !hidden">Invalid Value</span>
+            </div>
+            <div class="flex justify-end mt-2">
+              <button
+                type="submit"
+                class="bg-secondary text-yellow-700 font-inter font-bold px-6 py-2 text-sm rounded-md shadow-sm shadow-yellow-700 cursor-pointer transition-all duration-300 focus:shadow-none focus:ring-4 ring-yellow-900/50"
+                id="calculate"
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+          
+      </div>
+    </div>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
     <script src="script.js"></script>
-</body>
+    
+  </body>
 </html>
